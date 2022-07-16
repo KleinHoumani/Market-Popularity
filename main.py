@@ -62,7 +62,7 @@ for sub_name in subredditlist:
 app = Flask(__name__)
 
 @app.route("/", methods=['GET'])
-def reddit_wallstreetbets():
+def home():
     my_resp = make_response('test')
     my_resp.headers['Access-Control-Allow-Origin'] = '*'
     return my_resp
