@@ -13,6 +13,9 @@ password = os.environ.get('REDDIT_PASSWORD')
 reddit = praw.Reddit(client_id=client_id, client_secret=client_secret,
                      username='thederpytroller', password=password, user_agent='test1')
 
+headers = {
+    "user-agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Mobile Safari/537.36"
+}
 
 subredditlist = ['wallstreetbets', 'stocks']
 time_list = ["day", 'week', 'month', 'year']
@@ -27,7 +30,7 @@ for sub_name in subredditlist:
         symbolcount = []
         x = 0
         subreddit = reddit.subreddit(sub_name)
-        hot_python = list(subreddit.top(timeframe, limit=50))
+        hot_python = list(subreddit.top(timeframe, limit=30))
         with open('stocksymbols.txt', 'r') as symbolcheck:
             for line in symbolcheck:
                 finalsymbol1 = str(line.rstrip('\n'))
@@ -39,9 +42,28 @@ for sub_name in subredditlist:
                         x += 1
                     if finalsymbol2 in titlesplit:
                         x += 1
+                if timeframe == "day":
+                    stock_range = "1d"
+                if timeframe == "week":
+                    stock_range = "5d"
+                if timeframe == "month":
+                    stock_range = "1mo"
+                if timeframe == "year":
+                    stock_range = "1y"
                 if x >= 1:
+                    yahoo_url = 'https://query1.finance.yahoo.com/v8/finance/chart/' + finalsymbol1 + '?formatted=true&crumb=jEkX0k2sA5R&lang=en-US&region=US&events=div%7Csplit&includeAdjustedClose=true&interval=1d&range=' + stock_range + '&useYfid=true&corsDomain=finance.yahoo.com'
+                    data = requests.get(yahoo_url, headers=headers).json()
+                    most_recent_close = data['chart']['result'][0]['meta']['regularMarketPrice']
+                    old_close = data['chart']['result'][0]['meta']['chartPreviousClose']
+                    percent_change = most_recent_close / old_close
+                    time.sleep(0.5)
+
                     symbolcount.append('{\n' + '"stock": ' + '"' + str(finalsymbol1) + '",\n' + '"postcount": ' +
-                                       '"' + str(x) + '"\n},')
+                                       '"' + str(x) + '",\n' + '"price": ' + '"' + most_recent_close + '",\n' +
+                                       '",\n' + '"daychange": ' + '"' + percent_change + '"' + '\n},')
+
+                    # symbolcount.append('{\n' + '"stock": ' + '"' + str(finalsymbol1) + '",\n' + '"postcount": ' +
+                    #                    '"' + str(x) + '"\n},')
                 x -= x
 
         symbolcountnew = symbolcount[:-1]
@@ -81,4 +103,4 @@ def reddit_stocks():
 
 
 if __name__ == "__main__":
-    app.run(port=33507)
+    app.run()
