@@ -57,12 +57,13 @@ for sub_name in subredditlist:
                         data = requests.get(yahoo_url, headers=headers).json()
                         most_recent_close = data['chart']['result'][0]['meta']['regularMarketPrice']
                         old_close = data['chart']['result'][0]['meta']['chartPreviousClose']
-                        percent_change = most_recent_close / old_close
+                        percent_change = (100 * most_recent_close / old_close) - 100
+
                         time.sleep(0.5)
 
                         symbolcount.append('{\n' + '"stock": ' + '"' + str(finalsymbol1) + '",\n' + '"postcount": ' +
                                        '"' + str(x) + '",\n' + '"price": ' + '"' + str(most_recent_close) +
-                                       '",\n' + '"percentchange": ' + '"' + str(percent_change) + '"' + '\n},')
+                                       '",\n' + '"percentchange": ' + '"' + str(round(percent_change, 2)) + '"' + '\n},')
                     except:
                         print('error', finalsymbol1)
 
