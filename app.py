@@ -51,16 +51,20 @@ for sub_name in subredditlist:
                 if timeframe == "year":
                     stock_range = "1y"
                 if x >= 1:
-                    yahoo_url = 'https://query1.finance.yahoo.com/v8/finance/chart/' + finalsymbol1 + '?formatted=true&crumb=jEkX0k2sA5R&lang=en-US&region=US&events=div%7Csplit&includeAdjustedClose=true&interval=1d&range=' + stock_range + '&useYfid=true&corsDomain=finance.yahoo.com'
-                    data = requests.get(yahoo_url, headers=headers).json()
-                    most_recent_close = data['chart']['result'][0]['meta']['regularMarketPrice']
-                    old_close = data['chart']['result'][0]['meta']['chartPreviousClose']
-                    percent_change = most_recent_close / old_close
-                    time.sleep(0.5)
+                    try:
+                        yahoo_url = 'https://query1.finance.yahoo.com/v8/finance/chart/' + finalsymbol1 + '?formatted=true&crumb=jEkX0k2sA5R&lang=en-US&region=US&events=div%7Csplit&includeAdjustedClose=true&interval=1d&range=' + stock_range + '&useYfid=true&corsDomain=finance.yahoo.com'
+                        print(yahoo_url)
+                        data = requests.get(yahoo_url, headers=headers).json()
+                        most_recent_close = data['chart']['result'][0]['meta']['regularMarketPrice']
+                        old_close = data['chart']['result'][0]['meta']['chartPreviousClose']
+                        percent_change = most_recent_close / old_close
+                        time.sleep(0.5)
 
-                    symbolcount.append('{\n' + '"stock": ' + '"' + str(finalsymbol1) + '",\n' + '"postcount": ' +
-                                       '"' + str(x) + '",\n' + '"price": ' + '"' + str(most_recent_close) + '",\n' +
-                                       '",\n' + '"daychange": ' + '"' + str(percent_change) + '"' + '\n},')
+                        symbolcount.append('{\n' + '"stock": ' + '"' + str(finalsymbol1) + '",\n' + '"postcount": ' +
+                                       '"' + str(x) + '",\n' + '"price": ' + '"' + str(most_recent_close) +
+                                       '",\n' + '"percentchange": ' + '"' + str(percent_change) + '"' + '\n},')
+                    except:
+                        print('error', finalsymbol1)
 
                     # symbolcount.append('{\n' + '"stock": ' + '"' + str(finalsymbol1) + '",\n' + '"postcount": ' +
                     #                    '"' + str(x) + '"\n},')
