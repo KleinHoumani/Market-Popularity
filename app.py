@@ -59,8 +59,8 @@ for sub_name in subredditlist:
                     time.sleep(0.5)
 
                     symbolcount.append('{\n' + '"stock": ' + '"' + str(finalsymbol1) + '",\n' + '"postcount": ' +
-                                       '"' + str(x) + '",\n' + '"price": ' + '"' + most_recent_close + '",\n' +
-                                       '",\n' + '"daychange": ' + '"' + percent_change + '"' + '\n},')
+                                       '"' + str(x) + '",\n' + '"price": ' + '"' + str(most_recent_close) + '",\n' +
+                                       '",\n' + '"daychange": ' + '"' + str(percent_change) + '"' + '\n},')
 
                     # symbolcount.append('{\n' + '"stock": ' + '"' + str(finalsymbol1) + '",\n' + '"postcount": ' +
                     #                    '"' + str(x) + '"\n},')
