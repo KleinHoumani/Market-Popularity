@@ -113,7 +113,7 @@ def set_data():
             if sub_name == "stocks":
                 reddit_stocks_list.clear()
                 reddit_stocks_list.append("".join(times_combined))
-        time.sleep(20)
+        time.sleep(900)
 
 Thread(target=main_api).start()
 Thread(target=set_data).start()
