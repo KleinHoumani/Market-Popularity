@@ -95,6 +95,7 @@ def set_data():
                 x = 0
                 subreddit = reddit.subreddit(sub_name)
                 hot_python = list(subreddit.top(timeframe, limit=100))
+                time.sleep(0.5)
                 with open('stocksymbols.txt', 'r') as symbolcheck:
                     for line in symbolcheck:
                         finalsymbol1 = str(line.rstrip('\n'))
@@ -122,7 +123,7 @@ def set_data():
                                 old_close = data['chart']['result'][0]['meta']['chartPreviousClose']
                                 percent_change = (100 * most_recent_close / old_close) - 100
 
-                                time.sleep(0.5)
+                                time.sleep(1)
 
                                 symbolcount.append('{\n' + '"stock": ' + '"' + str(finalsymbol1) + '",\n' + '"postcount": ' +
                                                '"' + str(x) + '",\n' + '"price": ' + '"' + str(most_recent_close) +
