@@ -54,7 +54,7 @@ def main_api():
         return my_resp
 
     @app.route("/reddit_shortsqueeze", methods=['GET'])
-    def reddit_wallstreetbets():
+    def reddit_shortsqueeze():
         my_resp = make_response('{\n' + reddit_shortsqueeze_list[0] + '\n}')
         my_resp.headers['Access-Control-Allow-Origin'] = '*'
         return my_resp
