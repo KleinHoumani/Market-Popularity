@@ -134,14 +134,16 @@ def set_data():
                             # symbolcount.append('{\n' + '"stock": ' + '"' + str(finalsymbol1) + '",\n' + '"postcount": ' +
                             #                    '"' + str(x) + '"\n},')
                         x -= x
+                try:
+                    symbolcountnew = symbolcount[:-1]
+                    symbolcountnew.append(symbolcount[-1][:-1])
 
-                symbolcountnew = symbolcount[:-1]
-                symbolcountnew.append(symbolcount[-1][:-1])
-
-                if timeframe != "year":
-                    times_combined.append('"' + timeframe + '": [' + "".join(symbolcountnew) + '],')
-                else:
-                    times_combined.append('"' + timeframe + '": [' + "".join(symbolcountnew) + ']')
+                    if timeframe != "year":
+                        times_combined.append('"' + timeframe + '": [' + "".join(symbolcountnew) + '],')
+                    else:
+                        times_combined.append('"' + timeframe + '": [' + "".join(symbolcountnew) + ']')
+                except:
+                    print("symbolcountnew fail")
 
             if sub_name == "wallstreetbets":
                 reddit_wallstreetbets_list.clear()
