@@ -18,7 +18,7 @@ headers = {
     "user-agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Mobile Safari/537.36"
 }
 
-subredditlist = ['wallstreetbets', 'stocks']
+subredditlist = ['wallstreetbets', 'stocks', 'shortsqueeze', 'investing', 'options', 'stockmarket', 'daytrading']
 time_list = ["day", 'week', 'month', 'year']
 
 reddit_wallstreetbets_list_setup = ["setting up"]
@@ -26,8 +26,14 @@ reddit_stocks_list_setup = ["setting up"]
 
 reddit_wallstreetbets_list = ["setting up"]
 reddit_stocks_list = ["setting up"]
+reddit_shortsqueeze_list = ["setting up"]
+reddit_investing_list = ["setting up"]
+reddit_options_list = ["setting up"]
+reddit_stockmarket_list = ["setting up"]
+reddit_daytrading_list = ["setting up"]
 
 app = Flask(__name__)
+
 def main_api():
     @app.route("/", methods=['GET'])
     def home():
@@ -47,6 +53,36 @@ def main_api():
         my_resp.headers['Access-Control-Allow-Origin'] = '*'
         return my_resp
 
+    @app.route("/reddit_shortsqueeze", methods=['GET'])
+    def reddit_wallstreetbets():
+        my_resp = make_response('{\n' + reddit_shortsqueeze_list[0] + '\n}')
+        my_resp.headers['Access-Control-Allow-Origin'] = '*'
+        return my_resp
+
+    @app.route("/reddit_investing", methods=['GET'])
+    def reddit_stocks():
+        my_resp = make_response('{\n' + reddit_investing_list[0] + '\n}')
+        my_resp.headers['Access-Control-Allow-Origin'] = '*'
+        return my_resp
+
+    @app.route("/reddit_options", methods=['GET'])
+    def reddit_wallstreetbets():
+        my_resp = make_response('{\n' + reddit_options_list[0] + '\n}')
+        my_resp.headers['Access-Control-Allow-Origin'] = '*'
+        return my_resp
+
+    @app.route("/reddit_stockmarket", methods=['GET'])
+    def reddit_stocks():
+        my_resp = make_response('{\n' + reddit_stockmarket_list[0] + '\n}')
+        my_resp.headers['Access-Control-Allow-Origin'] = '*'
+        return my_resp
+
+    @app.route("/reddit_daytrading", methods=['GET'])
+    def reddit_wallstreetbets():
+        my_resp = make_response('{\n' + reddit_daytrading_list[0] + '\n}')
+        my_resp.headers['Access-Control-Allow-Origin'] = '*'
+        return my_resp
+
     if __name__ == "__main__":
         app.run()
 
@@ -55,11 +91,10 @@ def set_data():
         for sub_name in subredditlist:
             times_combined = []
             for timeframe in time_list:
-                stocklist = []
                 symbolcount = []
                 x = 0
                 subreddit = reddit.subreddit(sub_name)
-                hot_python = list(subreddit.top(timeframe, limit=30))
+                hot_python = list(subreddit.top(timeframe, limit=100))
                 with open('stocksymbols.txt', 'r') as symbolcheck:
                     for line in symbolcheck:
                         finalsymbol1 = str(line.rstrip('\n'))
@@ -113,7 +148,27 @@ def set_data():
             if sub_name == "stocks":
                 reddit_stocks_list.clear()
                 reddit_stocks_list.append("".join(times_combined))
-        time.sleep(900)
+            if sub_name == "shortsqueeze":
+                reddit_stocks_list.clear()
+                reddit_stocks_list.append("".join(times_combined))
+            if sub_name == "investing":
+                reddit_stocks_list.clear()
+                reddit_stocks_list.append("".join(times_combined))
+            if sub_name == "options":
+                reddit_stocks_list.clear()
+                reddit_stocks_list.append("".join(times_combined))
+            if sub_name == "stockmarket":
+                reddit_stocks_list.clear()
+                reddit_stocks_list.append("".join(times_combined))
+            if sub_name == "daytrading":
+                reddit_stocks_list.clear()
+                reddit_stocks_list.append("".join(times_combined))
+        time.sleep(1800)
+
+def no_idling():
+    print('.')
+    time.sleep(120)
 
 Thread(target=main_api).start()
 Thread(target=set_data).start()
+Thread(target=no_idling).start()
