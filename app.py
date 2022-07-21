@@ -60,25 +60,25 @@ def main_api():
         return my_resp
 
     @app.route("/reddit_investing", methods=['GET'])
-    def reddit_stocks():
+    def reddit_investing():
         my_resp = make_response('{\n' + reddit_investing_list[0] + '\n}')
         my_resp.headers['Access-Control-Allow-Origin'] = '*'
         return my_resp
 
     @app.route("/reddit_options", methods=['GET'])
-    def reddit_wallstreetbets():
+    def reddit_options():
         my_resp = make_response('{\n' + reddit_options_list[0] + '\n}')
         my_resp.headers['Access-Control-Allow-Origin'] = '*'
         return my_resp
 
     @app.route("/reddit_stockmarket", methods=['GET'])
-    def reddit_stocks():
+    def reddit_stockmarket():
         my_resp = make_response('{\n' + reddit_stockmarket_list[0] + '\n}')
         my_resp.headers['Access-Control-Allow-Origin'] = '*'
         return my_resp
 
     @app.route("/reddit_daytrading", methods=['GET'])
-    def reddit_wallstreetbets():
+    def reddit_daytrading():
         my_resp = make_response('{\n' + reddit_daytrading_list[0] + '\n}')
         my_resp.headers['Access-Control-Allow-Origin'] = '*'
         return my_resp
