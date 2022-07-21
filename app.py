@@ -149,20 +149,20 @@ def set_data():
                 reddit_stocks_list.clear()
                 reddit_stocks_list.append("".join(times_combined))
             if sub_name == "shortsqueeze":
-                reddit_stocks_list.clear()
-                reddit_stocks_list.append("".join(times_combined))
+                reddit_shortsqueeze_list.clear()
+                reddit_shortsqueeze_list.append("".join(times_combined))
             if sub_name == "investing":
-                reddit_stocks_list.clear()
-                reddit_stocks_list.append("".join(times_combined))
+                reddit_investing_list.clear()
+                reddit_investing_list.append("".join(times_combined))
             if sub_name == "options":
-                reddit_stocks_list.clear()
-                reddit_stocks_list.append("".join(times_combined))
+                reddit_options_list.clear()
+                reddit_options_list.append("".join(times_combined))
             if sub_name == "stockmarket":
-                reddit_stocks_list.clear()
-                reddit_stocks_list.append("".join(times_combined))
+                reddit_stockmarket_list.clear()
+                reddit_stockmarket_list.append("".join(times_combined))
             if sub_name == "daytrading":
-                reddit_stocks_list.clear()
-                reddit_stocks_list.append("".join(times_combined))
+                reddit_daytrading_list.clear()
+                reddit_daytrading_list.append("".join(times_combined))
         time.sleep(1800)
 
 def no_idling():
