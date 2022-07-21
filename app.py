@@ -101,7 +101,7 @@ def set_data():
                         finalsymbol1 = str(line.rstrip('\n'))
                         finalsymbol2 = "$" + finalsymbol1
                         for submission in hot_python:
-                            posttitle = submission.title.upper()
+                            posttitle = submission.title
                             titlesplit = posttitle.split()
                             if finalsymbol1 in titlesplit:
                                 x += 1
