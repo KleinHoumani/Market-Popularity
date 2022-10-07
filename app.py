@@ -8,11 +8,12 @@ from threading import Thread
 
 client_id = os.environ.get('REDDIT_CLIENT')
 client_secret = os.environ.get('REDDIT_SECRET')
+username = os.environ.get('REDDIT_USERNAME')
 password = os.environ.get('REDDIT_PASSWORD')
 
 
 reddit = praw.Reddit(client_id=client_id, client_secret=client_secret,
-                     username='thederpytroller', password=password, user_agent='test1')
+                     username=username, password=password, user_agent='test1')
 
 headers = {
     "user-agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Mobile Safari/537.36"
