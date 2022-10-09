@@ -1,0 +1,1 @@
+Using the reddit API, the top 100 posts for each timeframe are gathered from each supported subreddit. Each post title is checked for each stock symbol listed in stocks.txt. If the title contains the stock symbol in all capital letters or the stock symbol with a “$” preceding it, it is counted as one mention of that stock. Price data is then gathered from the yahoo finance API.
