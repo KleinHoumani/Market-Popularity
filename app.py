@@ -19,7 +19,7 @@ headers = {
     "user-agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Mobile Safari/537.36"
 }
 
-subredditlist = ['wallstreetbets', 'stocks', 'shortsqueeze', 'investing', 'options', 'stockmarket', 'daytrading']
+subreddit_list = ['wallstreetbets', 'stocks', 'shortsqueeze', 'investing', 'options', 'stockmarket', 'daytrading']
 time_list = ["day", 'week', 'month', 'year']
 sub_data = {}
 
@@ -32,19 +32,19 @@ class sub:
     def set_data(self):
         times_combined = []
         for timeframe in time_list:
-            symbolcount = []
+            symbol_count = []
             subreddit = reddit.subreddit(self.sub_name)
             hot_python = list(subreddit.top(timeframe, limit=100))
             time.sleep(0.5)
-            with open('stocksymbols.txt', 'r') as symbolcheck:
+            with open('stock_symbols.txt', 'r') as symbolcheck:
                 for line in symbolcheck:
                     x = 0
-                    finalsymbol1 = str(line.rstrip('\n'))
-                    finalsymbol2 = "$" + finalsymbol1
+                    final_symbol1 = str(line.rstrip('\n'))
+                    final_symbol2 = "$" + final_symbol1
                     for submission in hot_python:
-                        posttitle = submission.title
-                        titlesplit = posttitle.split()
-                        if finalsymbol1 in titlesplit or finalsymbol2 in titlesplit:
+                        post_title = submission.title
+                        title_split = post_title.split()
+                        if final_symbol1 in title_split or final_symbol2 in title_split:
                             x += 1
 
                     if timeframe == "day":
@@ -58,34 +58,35 @@ class sub:
 
                     if x >= 1:
                         try:
-                            yahoo_url = 'https://query1.finance.yahoo.com/v8/finance/chart/' + finalsymbol1 + '?formatted=true&crumb=jEkX0k2sA5R&lang=en-US&region=US&events=div%7Csplit&includeAdjustedClose=true&interval=1d&range=' + stock_range + '&useYfid=true&corsDomain=finance.yahoo.com'
+                            yahoo_url = 'https://query1.finance.yahoo.com/v8/finance/chart/' + final_symbol1 + '?formatted=true&crumb=jEkX0k2sA5R&lang=en-US&region=US&events=div%7Csplit&includeAdjustedClose=true&interval=1d&range=' + stock_range + '&useYfid=true&corsDomain=finance.yahoo.com'
                             data = requests.get(yahoo_url, headers=headers).json()
                             most_recent_close = data['chart']['result'][0]['meta']['regularMarketPrice']
                             old_close = data['chart']['result'][0]['meta']['chartPreviousClose']
                             percent_change = (100 * most_recent_close / old_close) - 100
-                            data = {"stock": finalsymbol1, "postcount": str(x), "price": str(most_recent_close), "percentchange": str(round(percent_change, 2))}
+                            data = {"stock": final_symbol1, "postcount": str(x), "price": str(most_recent_close), "percentchange": str(round(percent_change, 2))}
                             time.sleep(1)
 
-                            symbolcount.append(json.dumps(data) + ",")
+                            symbol_count.append(json.dumps(data) + ",")
                         except:
-                            print('error ', finalsymbol1)
-            if len(symbolcount) >= 1:
-                symbolcountnew = symbolcount[:-1]
-                symbolcountnew.append(symbolcount[-1][:-1])
+                            print('error ', final_symbol1)
+            if len(symbol_count) >= 1:
+                symbol_count_new = symbol_count[:-1]
+                symbol_count_new.append(symbol_count[-1][:-1])
 
                 if timeframe != "year":
-                    times_combined.append('"' + timeframe + '": [' + "".join(symbolcountnew) + '],')
+                    times_combined.append('"' + timeframe + '": [' + "".join(symbol_count_new) + '],')
                 else:
-                    times_combined.append('"' + timeframe + '": [' + "".join(symbolcountnew) + ']')
+                    times_combined.append('"' + timeframe + '": [' + "".join(symbol_count_new) + ']')
 
             self.data.clear()
             self.data.append("{" + "".join(times_combined) + "}")
 
 
 def update_data():
-    for subreddit in subredditlist:
-        sub_data[subreddit] = sub(subreddit)
-        sub_data[subreddit].set_data()
+    while True:
+        for subreddit in subreddit_list:
+            sub_data[subreddit] = sub(subreddit)
+            sub_data[subreddit].set_data()
         time.sleep(1800)
 
 
@@ -100,7 +101,7 @@ def main_api():
 
     @app.route("/reddit_<name>", methods=['GET'])
     def subreddit_data(name):
-        for subreddit in subredditlist:
+        for subreddit in subreddit_list:
             if name == subreddit:
                 resp = make_response(sub_data[subreddit].data[0])
                 resp.headers['Access-Control-Allow-Origin'] = '*'
