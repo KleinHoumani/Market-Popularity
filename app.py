@@ -69,9 +69,7 @@ class sub:
                             symbol_count.append(data)
                         except:
                             print('error ', final_symbol1)
-                    self.data[timeframe] = sorted(symbol_count, key=itemgetter("postcount"), reverse=True)
-            print(self.data)
-        print(self.data)
+            self.data[timeframe] = sorted(symbol_count, key=itemgetter("postcount"), reverse=True)
 
 
 def update_data():
