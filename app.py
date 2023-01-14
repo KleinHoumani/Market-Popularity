@@ -3,8 +3,9 @@ import json
 import requests
 import time
 import os
-from flask import Flask, make_response
+from flask import Flask, make_response, jsonify
 from threading import Thread
+from operator import itemgetter
 
 client_id = os.environ.get('REDDIT_CLIENT')
 client_secret = os.environ.get('REDDIT_SECRET')
@@ -27,10 +28,9 @@ sub_data = {}
 class sub:
     def __init__(self, sub_name):
         self.sub_name = sub_name
-        self.data = ["setting up"]
+        self.data = {"day": [], "week": [], "month": [], "year": []}
 
     def set_data(self):
-        times_combined = []
         for timeframe in time_list:
             symbol_count = []
             subreddit = reddit.subreddit(self.sub_name)
@@ -66,20 +66,12 @@ class sub:
                             data = {"stock": final_symbol1, "postcount": str(x), "price": str(most_recent_close), "percentchange": str(round(percent_change, 2))}
                             time.sleep(1)
 
-                            symbol_count.append(json.dumps(data) + ",")
+                            symbol_count.append(data)
                         except:
                             print('error ', final_symbol1)
-            if len(symbol_count) >= 1:
-                symbol_count_new = symbol_count[:-1]
-                symbol_count_new.append(symbol_count[-1][:-1])
-
-                if timeframe != "year":
-                    times_combined.append('"' + timeframe + '": [' + "".join(symbol_count_new) + '],')
-                else:
-                    times_combined.append('"' + timeframe + '": [' + "".join(symbol_count_new) + ']')
-
-            self.data.clear()
-            self.data.append("{" + "".join(times_combined) + "}")
+                    self.data[timeframe] = sorted(symbol_count, key=itemgetter("postcount"), reverse=True)
+            print(self.data)
+        print(self.data)
 
 
 def update_data():
@@ -101,11 +93,10 @@ def main_api():
 
     @app.route("/reddit_<name>", methods=['GET'])
     def subreddit_data(name):
-        for subreddit in subreddit_list:
-            if name == subreddit:
-                resp = make_response(sub_data[subreddit].data[0])
-                resp.headers['Access-Control-Allow-Origin'] = '*'
-                return resp
+        if name in subreddit_list:
+            resp = make_response(sub_data[name].data)
+            resp.headers['Access-Control-Allow-Origin'] = '*'
+            return resp
         return "No data found"
 
     if __name__ == "__main__":
